@@ -2,23 +2,25 @@ package main
 
 import (
 "fmt"
+	"os"
 )
 
 func main() {
 	arr := []int{10, 9, 5, 7, 3, 5, 2, 9, 4, 6, 10}
 
-	//res := SelectionSort(arr)// 选择排序
+	res := SelectSortByFury(arr)// 选择排序
 	//res := InsertionSort(arr) // 插入排序
-	//res := InsertionSortPro(arr) // 插入排序优化版
-	//res := BubbleSort(arr) // 冒泡排序
+	//res := InsertSortByFury(arr) // 插入排序优化版
+	//res := BubbleSortByFury(arr) // 冒泡排序
 	//res := MergeSort(arr) // 归并排序
-	res := QuickSort(arr) // 快速排序
+	//res := QuickSort(arr) // 快速排序
 	fmt.Print(res)
+	os.Open()
 }
 
 //选择排序
 //思路：每次循环找出最小的数，跟数组第一个数交换顺序，接下来在剩余的数里重复以上逻辑
-func SelectionSort(arr [11]int) [11]int {
+func SelectionSort(arr []int) []int {
 	length := len(arr)
 	for i := 0; i < length; i++ {
 		min := i
@@ -34,8 +36,23 @@ func SelectionSort(arr [11]int) [11]int {
 	return arr
 }
 
+func SelectSortByFury(arr []int) []int {
+	length := len(arr)
+	for i := 0; i < length; i++ {
+		min := i
+		for j := i+1; j < length; j++ {
+			if arr[min] > arr[j] {
+				min = j
+			}
+		}
+
+		arr[i], arr[min] = arr[min], arr[i]
+	}
+	return arr
+}
+
 //插入排序，类似扑克牌起牌，将未排序的数据插入到已排序的数据中
-func InsertionSort(arr [11]int) [11]int {
+func InsertionSort(arr []int) []int {
 	length := len(arr)
 	for i := 1; i < length; i++ {
 		for j := i; j > 0; j-- {
@@ -50,8 +67,23 @@ func InsertionSort(arr [11]int) [11]int {
 	return arr
 }
 
+func InsertSortByFury(arr []int) []int {
+	length := len(arr)
+	for i := 1; i < length; i++ {
+		for j := i; j > 0 ; j-- {
+			if arr[j-1] > arr[j] {
+				arr[j-1], arr[j] = arr[j], arr[j-1]
+			} else {
+				break
+			}
+		}
+	}
+
+	return arr
+}
+
 //插入排序优化版，用赋值代替交换操作
-func InsertionSortPro(arr [11]int) [11]int {
+func InsertionSortPro(arr []int) []int {
 	length := len(arr)
 	for i := 1; i < length; i++ {
 		temp := arr[i] //复制一份待比较的值
@@ -70,7 +102,7 @@ func InsertionSortPro(arr [11]int) [11]int {
 }
 
 //冒泡排序，每次和相邻的元素比较，内层每循环一次会把最大的循环到最后
-func BubbleSort(arr [11]int) [11]int {
+func BubbleSort(arr []int) []int {
 	length := len(arr)
 	for i := 0; i < length; i++ {
 		//j < length -i -1 原因：每循环一次，最后一位数已排好，不用再比
@@ -83,8 +115,26 @@ func BubbleSort(arr [11]int) [11]int {
 	return arr
 }
 
+func BubbleSortByFury(arr []int) []int {
+	length := len(arr)
+	for i := 0; i < length - 1; i++ {
+		over := false
+		for j := 0; j < length - i - 1; j++ {
+			if arr[j] > arr[j+1] {
+				over = true
+				arr[j], arr[j+1] = arr[j+1], arr[j]
+			}
+		}
+		if !over {
+			break
+		}
+	}
+
+	return arr
+}
+
 //冒泡排序优化版，如果某次循环发现没有需要交换的元素，则认为整个排序已完成
-func BubbleSortPro(arr [11]int) [11]int {
+func BubbleSortPro(arr []int) []int {
 	length := len(arr)
 	for i := 0; i < length; i++ {
 		over := false
@@ -147,6 +197,16 @@ func QuickSort(arr []int) []int {
 	return res
 }
 
+func QuickSortByFury(arr []int) []int {
+	length := len(arr)
+	if length <= 1 {
+		return arr
+	}
+
+	p := 0
+	return quickSortByFury(arr, p, length-1)
+}
+
 //递归方法
 func quickSort(arr []int, p int, r int) []int {
 	if p >= r {
@@ -158,6 +218,13 @@ func quickSort(arr []int, p int, r int) []int {
 	return arr
 }
 
+func quickSortByFury(arr []int, p int, r int) []int {
+	if p >= r {
+		return arr
+	}
+
+	return arr
+}
 //排序并返回pivot
 func partition(arr []int, p int, r int) int {
 	k := arr[p]
